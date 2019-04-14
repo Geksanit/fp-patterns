@@ -1,49 +1,60 @@
 # fp-patterns
 
-##command
+## command
 
 ```typescript
 //typescript code 
-class LoginCommand implements Command {
+interface ICommand {
+  execute: () => void;
+}
 
-  private String user;
-  private String password;
+const DB = {
+  login: (user: string, password: string) => {
+    console.log("login", user, password);
+  },
+  logout: (user: string) => {
+    console.log("logout", user);
+  }
+};
 
-  public LoginCommand(String user, String password) {
+class LoginCommand implements ICommand {
+  private user: string;
+  private password: string;
+
+  constructor(user: string, password: string) {
     this.user = user;
     this.password = password;
   }
 
-  @Override
-  public void execute() {
-    DB.login(user, password);
+  public execute() {
+    DB.login(this.user, this.password);
   }
 }
 
-public class LogoutCommand implements Command {
+class LogoutCommand implements ICommand {
+  private user: string;
 
-  private String user;
-
-  public LogoutCommand(String user) {
+  constructor(user: string) {
     this.user = user;
   }
 
-  @Override
-  public void execute() {
-    DB.logout(user);
+  public execute() {
+    DB.logout(this.user);
   }
 }
 
-(new LoginCommand("django", "unCh@1ned")).execute();
-(new LogoutCommand("django")).execute();
+new LoginCommand("django", "unCh@1ned").execute();
+new LogoutCommand("django").execute();
+
 ```
 
 ```typescript
-//typescript code 
-(defn execute [command]
-  (command))
+((user: string, password: string) => {
+  console.log("login", user, password);
+})("django", "unCh@1ned");
 
-(execute #(db/login "django" "unCh@1ned"))
-(execute #(db/logout "django"))
+((user: string) => {
+  console.log("logout", user);
+})("django");
 ```
 
